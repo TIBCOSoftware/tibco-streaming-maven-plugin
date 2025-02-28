@@ -360,7 +360,7 @@
 
     <distributionManagement>
         <site>
-            <id>www.tibco.com</id>
+            <id>Streaming.Sites</id>
             <url>${com.tibco.siteurl}</url>
         </site>
     </distributionManagement>
