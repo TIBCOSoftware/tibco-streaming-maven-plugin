@@ -124,7 +124,7 @@ pipeline {
                         mavenSnapshotRepo: 'ep-snapshots',
                         mavenReleaseRepo: 'ep-rc',
                         javaTool: jobUtil.getOpenJDK21Tool(),
-                        mavenTool: jobUtil.getMaven38Tool(),
+                        mavenTool: jobUtil.getMaven39Tool(),
                         useCachedMavenRepository: true,
                         // OSSH of release-work branches -- not ready.
                         mavenBranchOptions: [
