@@ -35,8 +35,9 @@
 
     <parent>
         <groupId>com.tibco.ep</groupId>
-        <artifactId>ep-maven</artifactId>
+        <artifactId>ep-maven-parent</artifactId>
         <version>2.3.0-SNAPSHOT</version>
+        <relativePath>../ep-maven-parent</relativePath>
     </parent>
 
     <artifactId>ep-maven-interface</artifactId>
