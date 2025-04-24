@@ -65,8 +65,8 @@ pipeline {
         choice(name: 'deployArtifacts', choices: ['snapshot', 'release', 'default', 'never', 'always'],
                description: 'By default, only main and release-work branches are deployed. Some deployments can be skipped if there are no changes in the default case.')
 
-        choice(name: 'deploySonatypeOSSRH', choices: ['release', 'never'],
-               description: 'By default, only releases are deployed to Sonatype OSSH.')
+        choice(name: 'deploySonatypeCentralPortal', choices: ['release', 'never'],
+               description: 'By default, only releases are deployed to Sonatype Central Portal.')
 
         string(name: 'mavenExtras', defaultValue: '',
                description: 'Extra JVM options for Maven, usually -DskipTests and the like.')
@@ -116,7 +116,7 @@ pipeline {
         stage ('Build') {
             steps {
                 script {
-                    def publicPomFile = "src/ep-maven/pom.xml"
+                    def publicPomFile = "src/ep-maven-parent/ep-maven/pom.xml"
                     
                     epDeclarative.buildInit(
                         pomFile: 'src/pom.xml',
@@ -139,11 +139,10 @@ pipeline {
                     def otherDeployRun = null
 
                     if (false) {
-                        // Artifactory-integrated Maven seems to always skip deployment.
-                        // OSSRH deployment will need to happen by other means.
+                        // Central Portal deployment will need to happen by other means.
                         if (jobUtil.isMavenReleaseVersion(epDeclarative.getPomVersion())
-                            && (!"never".equals(params.deploySonatypeOSSRH))) {
-                            echo "Will deploy to Sonatype OSSRH."
+                            && (!"never".equals(params.deploySonatypeCentralPortal))) {
+                            echo "Will deploy to Sonatype Central Portal."
                             otherDeployRun = [ goals: "deploy:deploy",
                                               pomFile: publicPomFile ]
                         }
