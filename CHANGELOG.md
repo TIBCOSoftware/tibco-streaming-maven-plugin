@@ -2,9 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2.3.0
+
+### Removed
+
+- Support for versions of Java prior to 21.
+
 ## 2.2.1
 
-## Removed
+### Removed
 
 - Support for Java code coverage. Cobertura does not work with
   versions of Java supported by Streaming 10.6 and newer.
