@@ -66,8 +66,12 @@
         <!-- Manage Maven plugin tools: annotations and plugins. -->
         <maven-plugin-tools.version>3.15.1</maven-plugin-tools.version>
 
-        <!-- by default skip gpg signing.  Enabled in jenkins only -->
+        <!-- By default, skip GPG signing. Enabled by central-portal
+             profile for public artifacts. -->
         <gpg.skip>true</gpg.skip>
+
+        <!-- Work directory fallback, to avoid pathname length issues. -->
+        <ep-maven.work.dir>${project.build.directory}</ep-maven.work.dir>
 
         <!--
             The unit test version for SB/DTM is the version of this project (using stubs).
@@ -324,6 +328,19 @@
             </activation>
             <properties>
                 <unit.test.sb.version>11.0.1-SNAPSHOT</unit.test.sb.version>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>use-given-workspace</id>
+            <activation>
+                <property>
+                    <name>env.WORKSPACE</name>
+                </property>
+            </activation>
+
+            <properties>
+                <ep-maven.work.dir>${env.WORKSPACE}/ep-work</ep-maven.work.dir>
             </properties>
         </profile>
 
@@ -638,9 +655,8 @@
 
 
     <modules>
-        <module>ep-maven-interface</module>
         <module>stub_platform</module>
-        <module>ep-maven</module>
+        <module>ep-maven-parent</module>
     </modules>
 
     <build>
@@ -855,6 +871,17 @@
                     <version>3.6.2</version>
                 </plugin>
 
+                <plugin>
+                    <groupId>org.sonatype.central</groupId>
+                    <artifactId>central-publishing-maven-plugin</artifactId>
+                    <version>0.7.0</version>
+                    <extensions>true</extensions>
+                    <configuration>
+                        <publishingServerId>central-portal</publishingServerId>
+                        <excludeArtifacts>ep-maven-parent</excludeArtifacts>
+                    </configuration>
+                </plugin>
+
             </plugins>
         </pluginManagement>
 
@@ -1063,16 +1090,5 @@
 
         </plugins>
     </reporting>
-
-    <distributionManagement>
-        <snapshotRepository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository>
-        <repository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-        </repository>
-    </distributionManagement>
 
 </project>

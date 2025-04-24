@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2018-2024. Cloud Software Group, Inc.
+ * Copyright (C) 2018-2025. Cloud Software Group, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -110,9 +110,13 @@ public class UnitTest extends BetterAbstractMojoTestCase {
         assertEquals(simulatedLog.getErrorLog(), 0, simulatedLog.getErrorLog().length());
         assertEquals(simulatedLog.getWarnLog(), 0, simulatedLog.getWarnLog().length());
 
-        // install to a different directory
+        // Install to a different directory.
         //
-        File productHome = new File(Paths.get("").toAbsolutePath().toFile(), "producthome");
+        final File productHome = new File(
+                Paths.get(System.getProperty("WORK_DIRECTORY", "")).toAbsolutePath().toFile(),
+                "producthome");
+        LOGGER.info("Installing to different directory " + productHome);
+        
         final File markerFile =
             new File(new File(productHome, "dependency-maven-plugin-markers"),
                      "com.tibco.ep.dtm-platform_" + getPlatformOSArchPart()

@@ -1,5 +1,5 @@
 <!--
-  Copyright (C) 2018-2024. Cloud Software Group, Inc.
+  Copyright (C) 2018-2025. Cloud Software Group, Inc.
   
   Redistribution and use in source and binary forms, with or without
   modification, are permitted provided that the following conditions are met:
@@ -27,7 +27,9 @@
   ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
   POSSIBILITY OF SUCH DAMAGE.
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <!-- vim: set tabstop=4 softtabstop=0 expandtab shiftwidth=4 smarttab : -->
 
@@ -35,7 +37,7 @@
 
     <parent>
         <groupId>com.tibco.ep</groupId>
-        <artifactId>ep-maven</artifactId>
+        <artifactId>ep-maven-parent</artifactId>
         <version>2.3.0-SNAPSHOT</version>
     </parent>
 
@@ -49,8 +51,6 @@
         <maven.site.skip>false</maven.site.skip>
         <maven.site.deploy.skip>false</maven.site.deploy.skip>
         <maven.deploy.skip>false</maven.deploy.skip>
-        <oss-stage.skip>true</oss-stage.skip>
-        <gpg.skip>${oss-stage.skip}</gpg.skip>
 
         <ep-maven.version>${project.version}</ep-maven.version>
         <archetype.test.ignoreEOLStyle>true</archetype.test.ignoreEOLStyle>
@@ -230,62 +230,6 @@
                 </executions>
             </plugin>
 
-            <!-- Flatten the current POM so that we don't have to ship its parent POM -->
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>flatten-maven-plugin</artifactId>
-                <configuration>
-                    <!-- Configure the flatten mode to OSS Repository Hosting -->
-                    <flattenMode>ossrh</flattenMode>
-                    <!--
-                        Include these additional elements, to keep aligned with previous iteration
-                         of the plugin.
-                    -->
-                    <pomElements>
-                        <inceptionYear />
-                        <organization />
-                    </pomElements>
-                    <!--
-                        By default the flattened POM is generated next to the plugin, so locate it
-                        in target.
-                        NB: the generated file will be: target/flattened_pom/.flattened-pom.xml
-                     -->
-                    <outputDirectory>./target/flattened_pom</outputDirectory>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>flatten</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>flatten</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-gpg-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>sign-artifacts</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>sign</goal>
-                        </goals>
-                        <!-- needed for newer gpg (2.1 vs 2.0):
-                        https://stackoverflow.com/questions/28859942/how-do-i-get-the-maven-gpg-plugin-to-use-a-passphrase-from-environment-variable
-
-                        <configuration>
-                            <gpgArguments>
-                                <arg>- -pinentry-mode</arg>
-                                <arg>loopback</arg>
-                            </gpgArguments>
-                        </configuration> -->
-                    </execution>
-                </executions>
-            </plugin>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-clean-plugin</artifactId>
@@ -349,6 +293,7 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
                     <systemPropertyVariables>
+                        <WORK_DIRECTORY>${ep-maven.work.dir}</WORK_DIRECTORY>
                         <CURRENT_PROJECT_VERSION>${project.version}</CURRENT_PROJECT_VERSION>
                         <REGRESSION_REPOSITORY>${settings.localRepository}</REGRESSION_REPOSITORY>
                     </systemPropertyVariables>
