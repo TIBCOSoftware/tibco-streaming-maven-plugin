@@ -44,7 +44,7 @@ def platform = "linux" // the one platform for which we build.
 
 // Java and Maven versions are still managed more conservatively.
 def labelExpr = jobUtil.getStreamingPlatformLabels(
-    streamingVersion: '11.1', // Streaming version compatiblity version.
+    streamingVersion: '11.2', // Streaming version compatiblity version.
     platform: platform
 )
 
