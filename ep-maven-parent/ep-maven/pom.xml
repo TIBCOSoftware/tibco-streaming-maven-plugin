@@ -51,8 +51,6 @@
         <maven.site.skip>false</maven.site.skip>
         <maven.site.deploy.skip>false</maven.site.deploy.skip>
         <maven.deploy.skip>false</maven.deploy.skip>
-        <oss-stage.skip>true</oss-stage.skip>
-        <gpg.skip>${oss-stage.skip}</gpg.skip>
 
         <ep-maven.version>${project.version}</ep-maven.version>
         <archetype.test.ignoreEOLStyle>true</archetype.test.ignoreEOLStyle>

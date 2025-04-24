@@ -64,10 +64,11 @@
                     <value>true</value>
                 </property>
             </activation>
+
             <properties>
-                <oss-stage.skip>false</oss-stage.skip>
                 <gpg.skip>false</gpg.skip>
             </properties>
+
             <build>
                 <plugins>
                     <plugin>

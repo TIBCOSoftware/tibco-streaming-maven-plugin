@@ -126,10 +126,10 @@ pipeline {
                         javaTool: jobUtil.getOpenJDK21Tool(),
                         mavenTool: jobUtil.getMaven39Tool(),
                         useCachedMavenRepository: true,
-                        // OSSH of release-work branches -- not ready.
+                        // Central Portal for release-work branches -- not ready.
                         mavenBranchOptions: [
                             [ matching: [ "release-workNOTREADY/.+" ],
-                             properties: [ 'oss-stage.skip': 'false' ] ]
+                             properties: [ 'central-portal': 'true' ] ]
                         ],
                         primaryPlatform: "linux",
                         siteProduct: "tibco-streaming-maven-plugin",
