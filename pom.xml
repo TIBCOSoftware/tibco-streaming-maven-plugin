@@ -69,6 +69,9 @@
         <!-- by default skip gpg signing.  Enabled in jenkins only -->
         <gpg.skip>true</gpg.skip>
 
+        <!-- Work directory fallback, to avoid pathname length issues. -->
+        <ep-maven.work.dir>${project.build.directory}</ep-maven.work.dir>
+
         <!--
             The unit test version for SB/DTM is the version of this project (using stubs).
             The integration test version is a real version.
@@ -325,6 +328,21 @@
             <properties>
                 <unit.test.sb.version>11.0.1-SNAPSHOT</unit.test.sb.version>
             </properties>
+        </profile>
+
+        <profile>
+            <id>alternate-product-home</id>
+            <activation>
+                <property>
+                    <name>env.WORKSPACE</name>
+                </property>
+            </activation>
+
+            <properties>
+                <ep-maven.work.dir>${env.WORKSPACE}/ep-work</ep-maven.work.dir>
+            </properties>
+
+            <!-- TODO Clean on clean phase -->
         </profile>
 
         <!-- Cloud Software Group use. -->

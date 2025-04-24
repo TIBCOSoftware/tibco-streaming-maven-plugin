@@ -351,6 +351,7 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
                     <systemPropertyVariables>
+                        <WORK_DIRECTORY>${ep-maven.work.dir}</WORK_DIRECTORY>
                         <CURRENT_PROJECT_VERSION>${project.version}</CURRENT_PROJECT_VERSION>
                         <REGRESSION_REPOSITORY>${settings.localRepository}</REGRESSION_REPOSITORY>
                     </systemPropertyVariables>
