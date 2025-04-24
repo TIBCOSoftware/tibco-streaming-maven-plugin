@@ -331,7 +331,7 @@
         </profile>
 
         <profile>
-            <id>alternate-product-home</id>
+            <id>use-given-workspace</id>
             <activation>
                 <property>
                     <name>env.WORKSPACE</name>
@@ -341,8 +341,6 @@
             <properties>
                 <ep-maven.work.dir>${env.WORKSPACE}/ep-work</ep-maven.work.dir>
             </properties>
-
-            <!-- TODO Clean on clean phase -->
         </profile>
 
         <!-- Cloud Software Group use. -->
