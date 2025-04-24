@@ -230,62 +230,6 @@
                 </executions>
             </plugin>
 
-            <!-- Flatten the current POM so that we don't have to ship its parent POM -->
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>flatten-maven-plugin</artifactId>
-                <configuration>
-                    <!-- Configure the flatten mode to OSS Repository Hosting -->
-                    <flattenMode>ossrh</flattenMode>
-                    <!--
-                        Include these additional elements, to keep aligned with previous iteration
-                         of the plugin.
-                    -->
-                    <pomElements>
-                        <inceptionYear />
-                        <organization />
-                    </pomElements>
-                    <!--
-                        By default the flattened POM is generated next to the plugin, so locate it
-                        in target.
-                        NB: the generated file will be: target/flattened_pom/.flattened-pom.xml
-                     -->
-                    <outputDirectory>./target/flattened_pom</outputDirectory>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>flatten</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>flatten</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-gpg-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>sign-artifacts</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>sign</goal>
-                        </goals>
-                        <!-- needed for newer gpg (2.1 vs 2.0):
-                        https://stackoverflow.com/questions/28859942/how-do-i-get-the-maven-gpg-plugin-to-use-a-passphrase-from-environment-variable
-
-                        <configuration>
-                            <gpgArguments>
-                                <arg>- -pinentry-mode</arg>
-                                <arg>loopback</arg>
-                            </gpgArguments>
-                        </configuration> -->
-                    </execution>
-                </executions>
-            </plugin>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-clean-plugin</artifactId>
