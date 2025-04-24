@@ -73,10 +73,10 @@ pipeline {
 
         booleanParam(name: 'cleanWorkspace', defaultValue: true, description: 'Clean workspace before build.')
 
-        string(name: 'notificationEmail', defaultValue: 'change-authors',
+        string(name: 'notificationEmail', defaultValue: 'when:team:streaming-maven-plugin-watchers change-authors',
                description: 'Email address for notifications on failure.')
 
-        string(name: 'successEmail', defaultValue: 'change-authors',
+        string(name: 'successEmail', defaultValue: 'when:release:streaming-maven-plugin-watchers change-authors',
                description: 'Email address for notifications on success.')
 
         choice(name: 'buildVerbose', choices: ['default', 'pipeline', 'tools' ],
