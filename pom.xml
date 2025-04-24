@@ -656,8 +656,8 @@
 
 
     <modules>
-        <module>ep-maven-parent</module>
         <module>stub_platform</module>
+        <module>ep-maven-parent</module>
     </modules>
 
     <build>
