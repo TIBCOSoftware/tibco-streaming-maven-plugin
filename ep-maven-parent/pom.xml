@@ -66,18 +66,13 @@
             </activation>
             <properties>
                 <oss-stage.skip>false</oss-stage.skip>
+                <gpg.skip>false</gpg.skip>
             </properties>
             <build>
                 <plugins>
                     <plugin>
                         <groupId>org.sonatype.central</groupId>
                         <artifactId>central-publishing-maven-plugin</artifactId>
-                        <version>0.7.0</version>
-                        <extensions>true</extensions>
-                        <configuration>
-                            <publishingServerId>central-portal</publishingServerId>
-                            <excludeArtifacts>ep-maven-parent</excludeArtifacts>
-                        </configuration>
                     </plugin>
                 </plugins>
             </build>

@@ -854,6 +854,17 @@
                     <version>3.6.2</version>
                 </plugin>
 
+                <plugin>
+                    <groupId>org.sonatype.central</groupId>
+                    <artifactId>central-publishing-maven-plugin</artifactId>
+                    <version>0.7.0</version>
+                    <extensions>true</extensions>
+                    <configuration>
+                        <publishingServerId>central-portal</publishingServerId>
+                        <excludeArtifacts>ep-maven-parent</excludeArtifacts>
+                    </configuration>
+                </plugin>
+
             </plugins>
         </pluginManagement>
 
