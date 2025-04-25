@@ -47,11 +47,12 @@ import java.util.jar.Attributes;
 import java.util.jar.Manifest;
 import java.util.stream.Stream;
 
+import javax.inject.Inject;
+
 import org.apache.maven.archiver.ManifestSection;
 import org.apache.maven.archiver.MavenArchiveConfiguration;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.assembly.archive.AssemblyArchiver;
 import org.apache.maven.plugins.assembly.model.Assembly;
@@ -66,7 +67,7 @@ abstract class BasePackageMojo extends BaseMojo {
     /**
      * Assembly archiver
      */
-    @Component
+    @Inject
     AssemblyArchiver assemblyArchiver;
 
     /**

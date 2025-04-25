@@ -33,9 +33,10 @@ import static org.apache.maven.plugins.annotations.LifecyclePhase.PROCESS_RESOUR
 
 import java.io.File;
 
+import javax.inject.Inject;
+
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.codehaus.plexus.archiver.ArchiverException;
 import org.codehaus.plexus.archiver.UnArchiver;
@@ -55,7 +56,7 @@ public class UnpackNarMojo extends BaseMojo {
     /**
      * Archive manager
      */
-    @Component
+    @Inject
     private ArchiverManager archiverManager;
     
     public void execute() throws MojoExecutionException {
