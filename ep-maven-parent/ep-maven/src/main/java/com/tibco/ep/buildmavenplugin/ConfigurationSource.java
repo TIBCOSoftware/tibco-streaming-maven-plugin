@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2018-2024 Cloud Software Group, Inc.
+ * Copyright (C) 2018-2025. Cloud Software Group, Inc.
  * 
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,7 +34,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.attribute.FileAttribute;
 
-import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugins.assembly.mojos.AbstractAssemblyMojo;
 import org.apache.maven.project.MavenProject;
@@ -46,7 +45,6 @@ import org.apache.maven.project.MavenProject;
 public class ConfigurationSource extends AbstractAssemblyMojo {
 
     private final MavenProject project;
-    private final ArtifactRepository localRepository;
     
     private final File outputDirectory;
     private final File siteDirectory;
@@ -62,9 +60,8 @@ public class ConfigurationSource extends AbstractAssemblyMojo {
      * @param localRepository local repository
      * @param session session
      */
-    ConfigurationSource(MavenProject project, ArtifactRepository localRepository, MavenSession session) {
+    ConfigurationSource(MavenProject project, MavenSession session) {
         this.project = project;
-        this.localRepository = localRepository;
         this.outputDirectory = new File(project.getBuild().getDirectory());
         this.siteDirectory = new File(project.getModel().getReporting().getOutputDirectory());
         

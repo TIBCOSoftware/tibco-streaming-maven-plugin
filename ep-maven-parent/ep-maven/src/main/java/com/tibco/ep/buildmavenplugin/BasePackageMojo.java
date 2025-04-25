@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2018-2025 Cloud Software Group, Inc.
+ * Copyright (C) 2018-2025. Cloud Software Group, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -405,7 +405,7 @@ abstract class BasePackageMojo extends BaseMojo {
         private void writeAssembly(Assembly assembly) throws MojoExecutionException {
             File assemblyFile;
 
-            ConfigurationSource configSource = new ConfigurationSource(project, localRepository, session);
+            ConfigurationSource configSource = new ConfigurationSource(project, session);
             try {
                 getLog().debug("Assembly: " + project.getVersion(), new RuntimeException(project
                     .getVersion()));

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2018-2024 Cloud Software Group, Inc.
+ * Copyright (C) 2018-2025. Cloud Software Group, Inc.
  * 
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -38,15 +38,11 @@ import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  * Unpack tests
  *
  */
 public class HelpTest extends BetterAbstractMojoTestCase  {
-    private Logger logger = LoggerFactory.getLogger(HelpTest.class);
 
     /**
      * rule
