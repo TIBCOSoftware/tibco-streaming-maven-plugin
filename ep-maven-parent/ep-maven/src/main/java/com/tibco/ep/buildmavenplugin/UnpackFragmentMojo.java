@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2018-2025 Cloud Software Group, Inc.
+ * Copyright (C) 2018-2025. Cloud Software Group, Inc.
  * 
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -33,9 +33,10 @@ import static org.apache.maven.plugins.annotations.LifecyclePhase.PROCESS_RESOUR
 
 import java.io.File;
 
+import javax.inject.Inject;
+
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.codehaus.plexus.archiver.ArchiverException;
 import org.codehaus.plexus.archiver.UnArchiver;
@@ -63,7 +64,7 @@ public class UnpackFragmentMojo extends BaseMojo {
     /**
      * Archive manager
      */
-    @Component
+    @Inject
     private ArchiverManager archiverManager;
 
     public void execute() throws MojoExecutionException {

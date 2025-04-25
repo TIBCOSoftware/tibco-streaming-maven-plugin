@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020-2024 Cloud Software Group, Inc.
+ * Copyright (C) 2020-2025. Cloud Software Group, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -41,6 +41,8 @@ import com.tibco.ep.sb.services.management.IDestination;
 public class Destination extends ServiceAwareStub implements IDestination {
 
     private final AbstractDestinationBuilder builder;
+
+    @SuppressWarnings("unused")
     private int discoveryPort = 0;
 
     /**
@@ -50,7 +52,7 @@ public class Destination extends ServiceAwareStub implements IDestination {
         super(builder.getAdminService());
         this.builder = builder;
 
-        //  Also convers logging node constructor.
+        // Also convers logging node constructor.
         //
         this.logMethod("constructor", builder);
     }

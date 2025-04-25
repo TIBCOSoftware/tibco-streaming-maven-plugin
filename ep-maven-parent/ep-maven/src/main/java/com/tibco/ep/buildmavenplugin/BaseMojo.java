@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2018-2025 Cloud Software Group, Inc.
+ * Copyright (C) 2018-2025. Cloud Software Group, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -53,6 +53,8 @@ import java.util.jar.Attributes;
 import java.util.jar.JarInputStream;
 import java.util.jar.Manifest;
 
+import javax.inject.Inject;
+
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.artifact.resolver.ArtifactResolutionRequest;
@@ -64,7 +66,6 @@ import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.LegacySupport;
 import org.apache.maven.plugin.MojoExecution;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.DefaultProjectBuildingRequest;
 import org.apache.maven.project.MavenProject;
@@ -142,22 +143,22 @@ abstract class BaseMojo extends AbstractMojo {
     /**
      * Maven resolver
      */
-    @Component
+    @Inject
     ArtifactResolver artifactResolver;
     /**
      * Maven repository system
      */
-    @Component
+    @Inject
     RepositorySystem repositorySystem;
     /**
      * Build context
      */
-    @Component
+    @Inject
     BuildContext buildContext;
     /**
      * Project helper
      */
-    @Component
+    @Inject
     MavenProjectHelper helper;
     /**
      * Maven execution
@@ -195,7 +196,7 @@ abstract class BaseMojo extends AbstractMojo {
     @Parameter(defaultValue = "${localRepository}", required = true, readonly = true)
     ArtifactRepository localRepository;
 
-    @Component
+    @Inject
     private LegacySupport legacySupport;
 
     /**
@@ -229,7 +230,7 @@ abstract class BaseMojo extends AbstractMojo {
     @Parameter
     String[] ignoreLeaks;
 
-    @Component(hint = "default")
+    @Inject
     private DependencyGraphBuilder dependencyGraphBuilder;
 
     @Parameter(defaultValue = "${reactorProjects}", readonly = true, required = true)

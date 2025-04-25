@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2018-2025 Cloud Software Group, Inc.
+ * Copyright (C) 2018-2025. Cloud Software Group, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -47,11 +47,12 @@ import java.util.jar.Attributes;
 import java.util.jar.Manifest;
 import java.util.stream.Stream;
 
+import javax.inject.Inject;
+
 import org.apache.maven.archiver.ManifestSection;
 import org.apache.maven.archiver.MavenArchiveConfiguration;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.assembly.archive.AssemblyArchiver;
 import org.apache.maven.plugins.assembly.model.Assembly;
@@ -66,7 +67,7 @@ abstract class BasePackageMojo extends BaseMojo {
     /**
      * Assembly archiver
      */
-    @Component
+    @Inject
     AssemblyArchiver assemblyArchiver;
 
     /**
@@ -405,7 +406,7 @@ abstract class BasePackageMojo extends BaseMojo {
         private void writeAssembly(Assembly assembly) throws MojoExecutionException {
             File assemblyFile;
 
-            ConfigurationSource configSource = new ConfigurationSource(project, localRepository, session);
+            ConfigurationSource configSource = new ConfigurationSource(project, session);
             try {
                 getLog().debug("Assembly: " + project.getVersion(), new RuntimeException(project
                     .getVersion()));

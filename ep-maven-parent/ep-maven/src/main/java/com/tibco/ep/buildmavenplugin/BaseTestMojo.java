@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2018-2025 Cloud Software Group, Inc.
+ * Copyright © 2018-2025. Cloud Software Group, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -304,7 +304,6 @@ abstract class BaseTestMojo extends BaseExecuteMojo {
      */
     @Parameter
     private List<String> additionalClasspathElements;
-    private PluginClassloader coverageClassLoader = null;
 
     /**
      * Build a String array of include/exclude patterns. Convert the list of
@@ -545,7 +544,6 @@ abstract class BaseTestMojo extends BaseExecuteMojo {
                 return false;
             }
 
-            String scope = artifact.getScope();
             String groupId = artifact.getGroupId();
             String artifactId = artifact.getArtifactId();
 

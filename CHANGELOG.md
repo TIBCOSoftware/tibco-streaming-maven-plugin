@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 ### Removed
 
 - Support for versions of Java prior to 21.
+- Support for versions of Maven prior to 3.9.9.
 
 ## 2.2.1
 

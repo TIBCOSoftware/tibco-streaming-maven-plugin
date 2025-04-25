@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023-2025 Cloud Software Group, Inc.
+ * Copyright (C) 2023-2025. Cloud Software Group, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -33,8 +33,9 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.Collections;
 
+import javax.inject.Inject;
+
 import org.apache.maven.model.Resource;
-import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.shared.filtering.MavenFilteringException;
 import org.apache.maven.shared.filtering.MavenResourcesExecution;
 import org.apache.maven.shared.filtering.MavenResourcesFiltering;
@@ -44,7 +45,7 @@ import org.apache.maven.shared.filtering.MavenResourcesFiltering;
  */
 abstract class BaseCompileMojo extends BaseMojo {
 
-    @Component
+    @Inject
     private MavenResourcesFiltering filtering;
 
     /**
