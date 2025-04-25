@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## 2.3.0
 
+### Added
+
+- Can specify a Maven `<archive>` configuration element to add additional manifest headers, such as for custom Java operators.
+
 ### Removed
 
 - Support for versions of Java prior to 21.
@@ -53,7 +57,7 @@ All notable changes to this project will be documented in this file.
 
 - Unpacking info lines have been reduced to the debug log level.
 
-- [SB-50168]((https://jira.tibco.com/browse/SB-50168) Remove github pages plugin
+- [SB-50168](https://jira.tibco.com/browse/SB-50168) Remove github pages plugin
 
 ### Fixed
 
@@ -68,7 +72,7 @@ All notable changes to this project will be documented in this file.
 
 - [SB-48556](https://jira.tibco.com/browse/SB-48556) EP-MAVEN: confusing messages running against read-only product installation
 
-  Improve error message if product directory is not found.
+- Improve error message if product directory is not found.
 
 ## 1.5.0 - September 19, 2019
 
