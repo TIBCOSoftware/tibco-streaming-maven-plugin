@@ -1,16 +1,10 @@
 # Usage
 
-* [Build artifacts](#build-artifacts)
-* [Packaging types](#packaging-types)
-* [Product installation](#product-installation)
-* [Codeline structure](#codeline-structure)
-* [Example project object model files ( pom.xml )](#example-project-object-model-files-pom-xml)
-* [Plugin prefixes](#plugin-prefixes)
+<!-- MACRO{toc|fromDepth=2} -->
 
 The following sections provides an introduction to the Event Processing 
 (EP) Build Maven plugin.
 
-<a name="build-artifacts"></a>
 
 ## Build artifacts
 
@@ -21,7 +15,6 @@ application archive to the runtime topology :
 
 ![Build fragments](uml/fragments.svg)
 
-<a name="packaging-types"></a>
 
 ## Packaging types
 
@@ -52,7 +45,6 @@ other maven artifact.
 The maven plugin has been designed to require minimal configuration for most
 cases and yet allow for extensive configuration.  
 
-<a name="product-installation"></a>
 
 ## Product installation
 
@@ -67,7 +59,6 @@ of the **$TIBCO_EP_HOME** environment variable.
 This directory is used to install the product (if missing) and is used for 
 administration commands.
 
-<a name="codeline-structure"></a>
 
 ## Codeline structure
   
@@ -114,7 +105,6 @@ $ mvn install
 [INFO] ------------------------------------------------------------------------                               
 ```
 
-<a name="example-project-object-model-files-pom-xml"></a>
 
 ## Example project object model files ( pom.xml )
 
@@ -344,7 +334,6 @@ download the appropriate version before using.
 </project>
 ```
 
-<a name="plugin-prefixes"></a>
 
 ## Plugin prefixes
 

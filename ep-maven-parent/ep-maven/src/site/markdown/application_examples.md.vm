@@ -1,16 +1,8 @@
 # Application archive examples
 
-* [Codeline structure](#codeline-structure)
-* [Application dependencies](#application-dependencies)
-* [Feed playback](#feed-playback)
-* [Feed recording](#feed-recording)
-* [Admin targets](#admin-targets)
-* [External programs](#external-programs)
-* [Additional files in application archive](#additional-files-in-application-archive)
+<!-- MACRO{toc|fromDepth=2} -->
 
-<a name="codeline-structure"></a>
-
-## Codeline structure
+#[[##]]# Codeline structure
   
 The recommended application codeline structure is :
   
@@ -94,9 +86,8 @@ to install the built and tested artifacts to the local maven repository.
 Note that the application definition file is detected by its configuration
 type ( **type = "com.tibco.ep.dtm.configuration.application"** ).
 
-<a name="application-dependencies"></a>
 
-## Application dependencies
+#[[##]]# Application dependencies
 
 Usually, all dependencies are included into the fragment zip files and so
 don't need to be included again in the application archive.  However
@@ -126,9 +117,8 @@ See below for an example :
 ....
 ```
 
-<a name="feed-playback"></a>
 
-## Feed playback
+#[[##]]# Feed playback
 
 The administration target **playback** can be used for 
 injecting tuples to streams.
@@ -184,9 +174,8 @@ injecting tuples to streams.
 ....
 ```
 
-<a name="feed-recording"></a>
 
-## Feed recording
+#[[##]]# Feed recording
 
 The administration target **record** can be used for 
 recording tuples from streams.
@@ -266,9 +255,8 @@ An example of recording a playback is shown below :-
 ....
 ```
 
-<a name="admin-targets"></a>
 
-## Admin targets
+#[[##]]# Admin targets
 
 In the case of testing an application archive, the pre-integration-test
 phase is used to start the nodes, the integration-test to run the test cases
@@ -396,9 +384,8 @@ $ mvn install
 [INFO] ------------------------------------------------------------------------
 ```
 
-<a name="external-programs"></a>
 
-## External programs
+#[[##]]# External programs
 
 Test cases may need supporting programs to run - for example a database server.
 This can be achieved using the [exec-maven-plugin](http://www.mojohaus.org/exec-maven-plugin/)
@@ -457,9 +444,8 @@ run and stopped after the test cases have been completed.
             </plugin>
 ```
 
-<a name="additional-files-in-application-archive"></a>
 
-## Additional files in application archive
+#[[##]]# Additional files in application archive
 
 Sometimes its useful to add additional files to the application archive - once
 added these will be available at runtime in the application/shared directory.

@@ -1,9 +1,6 @@
 # Cloud examples
 
-* [Docker images](#docker-images)
-* [References](#references)
-
-<a name="docker-images"></a>
+<!-- MACRO{toc|fromDepth=2} -->
 
 ## Docker images
 
@@ -271,8 +268,6 @@ $ docker exec A.efdockerapp_application epadmin servicename=efdockerapp_applicat
 ```
 
 ![Kitematic](images/kitematic.png)
-
-<a name="references"></a>
 
 ## References
 

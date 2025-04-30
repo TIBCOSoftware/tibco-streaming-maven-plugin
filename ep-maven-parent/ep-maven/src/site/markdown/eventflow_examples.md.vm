@@ -1,18 +1,9 @@
 # EventFlow fragment examples
 
-* [Directory structure](#directory-structure)
-* [Basic build, sbunit test and install](#basic-build-sbunit-test-and-install)
-* [Calling out to java](#calling-out-to-java)
-* [External dependency](#external-dependency)
-* [Building native libraries](#building-native-libraries)
-* [Third party native libraries](#third-party-native-libraries)
-* [Multiple sbapps](#multiple-sbapps)
-* [Java adapters](#java-adapters)
-* [EventFlow fragment referencing another EventFlow fragment](#eventflow-fragment-referencing-another-eventflow-fragment)
+<!-- MACRO{toc|fromDepth=2} -->
 
-<a name="directory-structure"></a>
 
-# Directory structure
+#[[##]]# Directory structure
 
 The recommended EventFlow directory structure is :
 
@@ -43,9 +34,8 @@ src/test/eventflow.
 
 Test sources (EventFlow, java, etc) are not included in the EventFlow fragment archive.
 
-<a name="basic-build-sbunit-test-and-install"></a>
 
-# Basic build, sbunit test and install
+#[[##]]# Basic build, sbunit test and install
 
 The following pom.xml will build, unit test, and install an EventFlow fragment to the local maven 
 repository.
@@ -297,17 +287,15 @@ $ mvn install
 [INFO] ------------------------------------------------------------------------
 ```
 
-<a name="calling-out-to-java"></a>
 
-# Calling out to java
+#[[##]]# Calling out to java
 
 Java code that needs to be included with the application can be placed in 
 java source directory ( src/main/java ).  This code will be added to the 
 fragment and included with any test cases.
 
-<a name="external-dependency"></a>
 
-# External dependency
+#[[##]]# External dependency
 
 External java (jar) dependencies can be added to the maven pom.xml - these are
 then included in build, test and package steps.
@@ -331,9 +319,8 @@ For example :
 ...
 ```
 
-<a name="building-native-libraries"></a>
 
-# Building native libraries
+#[[##]]# Building native libraries
 
 Whilst a maven build could use [exec-maven-plugin](http://www.mojohaus.org/exec-maven-plugin/)
 to call the native toolchain ( make, g++ etc ), the maven plugin 
@@ -421,9 +408,8 @@ Architecture-OperatingSystem-Linker (AOL) values references in the classifer
 above.  The maven plugin will map these to the internal paths when the 
 fragment is built.
 
-<a name="third-party-native-libraries"></a>
 
-# Third party native libraries
+#[[##]]# Third party native libraries
 
 Its also possible to build a nar archive containing shared libraries from 
 a third party - ie when the source isn't available.  The directory
@@ -530,17 +516,15 @@ and the shared libraries will be included in the runtime library path.
     </profiles>
 ```
 
-<a name="multiple-sbapps"></a>
 
-# Multiple sbapps
+#[[##]]# Multiple sbapps
 
 There is no difference between a fragment consisting of one sbapp file
 and a fragment consisting of multiple sbapp files.  Multiple sbapp and
 sbint files are added to the EventFlow fragment.
 
-<a name="java-adapters"></a>
 
-# Java adapters
+#[[##]]# Java adapters
 
 EventFlow adapters written in java can be built in a maven module with a
 packaging type of jar and use a EventFlow application with sbunit to test.
@@ -577,9 +561,8 @@ To use this adapter in a EventFlow application just set as a dependency :
         ....
 ```
 
-<a name="eventflow-fragment-referencing-another-eventflow-fragment"></a>
 
-# EventFlow fragment referencing another EventFlow fragment
+#[[##]]# EventFlow fragment referencing another EventFlow fragment
 
 To import a EventFlow application add the fragment to the pom.xml
 dependencies :-

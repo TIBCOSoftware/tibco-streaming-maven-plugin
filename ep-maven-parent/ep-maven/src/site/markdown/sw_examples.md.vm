@@ -1,12 +1,9 @@
 # Streaming Web flow fragment examples
 
-* [Directory structure](#directory-structure)
-* [Basic build and install](#basic-build-and-install)
-* [Depending on block projects](#depending-on-block-projects)
+<!-- MACRO{toc|fromDepth=2} -->
 
-<a name="directory-structure"></a>
 
-# Directory structure
+#[[##]]# Directory structure
 
 The recommended Streaming Web directory structure is :
 
@@ -15,9 +12,8 @@ The recommended Streaming Web directory structure is :
 Note that the default source directory is set by the plugin to 
 src/main/eventflow.
 
-<a name="basic-build-and-install"></a>
 
-## Basic build and install
+#[[###]]# Basic build and install
 
 The following pom.xml will build and install to the local maven 
 repository, a Streaming Web fragment.
@@ -101,9 +97,8 @@ $ mvn install
 [INFO] ------------------------------------------------------------------------
 ```
     
-<a name="depending-on-block-projects"></a>
 
-## Depending on block projects
+#[[###]]# Depending on block projects
 
 A Streaming Web project needs to express dependencies on the block projects referenced from 
 the project's flow diagram.  These projects' fragments will be added to the fragment.

@@ -1,11 +1,9 @@
 # Goals
 
-* [Goals](#goals)
-* [Lifecycle bindings](#lifecycle-bindings)
+<!-- MACRO{toc|fromDepth=2} -->
 
-<a name="goals"></a>
 
-## Goals
+#[[##]]# Goals
 
 The maven goals available are :
 
@@ -47,9 +45,8 @@ The maven goals available are :
 
 * [ep-maven-plugin:help](${context.get("site.ep-maven-plugin.url")}/help-mojo.html)
 
-<a name="lifecycle-bindings"></a>
 
-## Lifecycle bindings
+#[[##]]# Lifecycle bindings
 
 The maven plugin configures lifecycle bindings for the new packaging types as follows :
   

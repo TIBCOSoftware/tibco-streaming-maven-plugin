@@ -1,44 +1,16 @@
 # General
 
-* [Codeline structure](#codeline-structure)
-* [Dependency scope](#dependency-scope)
-* [Parent poms](#parent-poms)
-* [Build, test and install](#build-test-and-install)
-* [Cleaning up](#cleaning-up)
-* [Build only](#build-only)
-* [Skipping start and stop nodes](#skipping-start-and-stop-nodes)
-* [Summary of command-line flags](#summary-of-command-line-flags)
-* [Multiple test nodes](#multiple-test-nodes)
-* [Install node parameters](#install-node-parameters)
-* [Start node parameters](#start-node-parameters)
-* [Run a single junit test case](#run-a-single-junit-test-case)
-* [Administration commands when unit testing](#administration-commands-when-unit-testing)
-* [Usernames and passwords](#usernames-and-passwords)
-* [Discovery port](#discovery-port)
-* [Creating additional artifacts](#creating-additional-artifacts)
-* [javaOptions and nodeOptions](#javaoptions-and-nodeoptions)
-* [Debugging](#debugging)
-* [System variables](#system-variables)
-* [Environment variables](#environment-variables)
-* [Running tests more than once](#running-tests-more-than-once)
-* [JVM exit](#jvm-exit)
-* [Managed object leak detection support](#managed-object-leak-detection-support)
-* [Migrating from surefire](#migrating-from-surefire)
-* [Additional support product](#additional-support-product)
-* [Maven Archetypes](#maven-archetypes)
-* [SonarQube analysis](#sonarqube-analysis)
+<!-- MACRO{toc|fromDepth=2} -->
 
 Much of how to use the maven plugin is consistent across event processing
 technologies - so the non-specific usages are discussed here.
 
-<a name="codeline-structure"></a>
 
 ## Codeline structure
 
 Maven has a [standard directory layout](https://maven.apache.org/guides/introduction/introduction-to-the-standard-directory-layout.html)
 - this forms the basis of the recommended structure.
 
-<a name="dependency-scope"></a>
 
 ## Dependency scope
 
@@ -63,7 +35,6 @@ for each dependency.  So :
     cases.  Dependency is not included when compiling application.  Dependency 
     is included in shipped artifacts.
 
-<a name="parent-poms"></a>
 
 ## Parent poms
 
@@ -81,7 +52,6 @@ These are :
 | Application             | com.tibco.ep.sb.parent | ep-application       | StreamBase product version ( eg 10.4.0 )  |
 | Application with docker | com.tibco.ep.sb.parent | ep-application-docker| StreamBase product version ( eg 10.4.0 )  |
 
-<a name="build-test-and-install"></a>
 
 ## Build, test and install
 
@@ -236,7 +206,6 @@ $ mvn install
 [INFO] ------------------------------------------------------------------------
 ```
 
-<a name="cleaning-up"></a>
 
 ## Cleaning up
 
@@ -272,7 +241,6 @@ $ mvn clean
 [INFO] ------------------------------------------------------------------------
 ```
 
-<a name="build-only"></a>
 
 ## Build only
 
@@ -282,7 +250,6 @@ To only build the java fragment (ie skip running test cases) use :
 $ mvn -DskipTests install
 ```
 
-<a name="skipping-start-and-stop-nodes"></a>
 
 ## Skipping start and stop nodes
 
@@ -330,7 +297,6 @@ Note that in the default case (discovery port is not specified), the selected
 discovery port is persisted in the build directory 
 (by default target/discovery.port) and will be used on subsequent runs.
 
-<a name="summary-of-command-line-flags"></a>
 
 ## Summary of command-line flags
 
@@ -345,7 +311,6 @@ discovery port is persisted in the build directory
 | -DskipStart -DskipStop | no      | no          | yes      | no         | no           |
 | -DinstallOnly    | yes           | no          | no       | no         | no           |
 
-<a name="multiple-test-nodes"></a>
 
 ## Multiple test nodes
 
@@ -420,7 +385,6 @@ start a test application on all nodes before starting junit :
 
 ![Test main](uml/testmain.svg)
 
-<a name="install-node-parameters"></a>
 
 ## Install node parameters
 
@@ -444,7 +408,6 @@ For example :
 ...
 ```
 
-<a name="start-node-parameters"></a>
 
 ## Start node parameters
 
@@ -468,7 +431,6 @@ For example :
 ...
 ```
 
-<a name="run-a-single-junit-test-case"></a>
 
 ## Run a single junit test case
 
@@ -479,7 +441,6 @@ property. for example :
 $ mvn install -Dtest=FilterTest
 ```
 
-<a name="administration-commands-when-unit-testing"></a>
 
 ## Administration commands when unit testing
 
@@ -565,7 +526,6 @@ One such use is failover testing with the **kill node** commmand :
 ....
 ```
 
-<a name="usernames-and-passwords"></a>
 
 ## Usernames and passwords
 
@@ -592,7 +552,6 @@ however, the user name and password can be provided if required :
 ....
 ```
 
-<a name="discovery-port"></a>
 
 ## Discovery port
 
@@ -621,7 +580,6 @@ Or on the command line :
   $ mvn -DdiscoveryPort=4000 ...
 ```
 
-<a name="creating-additional-artifacts"></a>
 
 ## Creating additional artifacts
 
@@ -666,7 +624,6 @@ The [maven-source-plugin](https://maven.apache.org/plugins/maven-source-plugin/)
 will include any files found in source directory paths — so will include
 java, EventFlow, and LiveView source files.
 
-<a name="javaoptions-and-nodeoptions"></a>
 
 ## javaOptions and nodeOptions
 
@@ -689,7 +646,6 @@ this is to give stability to test runs.  However, the **nodeOptions** may be use
 $ mvn -DnodeOptions=ignoreoptionsfile=false ...
 ```
 
-<a name="debugging"></a>
 
 ## Debugging
 
@@ -796,7 +752,6 @@ debug=true option can be passed on the command line :
 $ mvn -Doptions=debug=true ..  
 ```
 
-<a name="system-variables"></a>
 
 ## System variables
 
@@ -831,7 +786,6 @@ System variables can also be set using javaOptions :
             </plugin>  
 ```
 
-<a name="environment-variables"></a>
 
 ## Environment variables
 
@@ -858,7 +812,6 @@ These can also be set on the command-line :
 $ mvn -DenvironmentVariables=ORACLE_HOME=/home/oracle,SYBASE_HOME=/home/sybase ...
 ```
 
-<a name="running-tests-more-than-once"></a>
 
 ## Running tests more than once
 
@@ -900,7 +853,6 @@ in DEVELOPMENT mode first then PRODUCTION :
             </plugin>  
 ```
 
-<a name="jvm-exit"></a>
 
 ## JVM exit
 
@@ -921,7 +873,6 @@ call exit thus allowing the test case to always complete :
             </plugin>  
 ```
 
-<a name="managed-object-leak-detection-support"></a>
 
 ## Managed object leak detection support
 
@@ -994,7 +945,6 @@ example :
             </plugin>
 ```
 
-<a name="migrating-from-surefire"></a>
 
 ## Migrating from surefire
 
@@ -1019,7 +969,6 @@ with :
             </plugin>
 ```
 
-<a name="additional-support-product"></a>
 
 ## Additional support product
 
@@ -1039,7 +988,6 @@ diagnosing problems.  This can be included in a project build thus :
     </dependencies>
 ```
 
-<a name="maven-archetypes"></a>
 
 ## Maven Archetypes
 
@@ -1228,7 +1176,6 @@ and use this in the project pom.xml :
 ....
 ```
 
-<a name="sonarqube-analysis"></a>
 
 ## SonarQube analysis
 
