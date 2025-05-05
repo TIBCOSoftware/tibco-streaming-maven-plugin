@@ -1,9 +1,6 @@
 name: Deploy ep-maven generated documentation site
 
 on:
-  push:
-    branches: ["gh-pages"]
-
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
@@ -26,7 +23,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        # Ensure we checkout gh-pages even if the workflow is triggered manually
         with:
           ref: gh-pages
       - name: Setup Pages
