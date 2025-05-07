@@ -899,9 +899,17 @@ abstract class BaseTestMojo extends BaseExecuteMojo {
                 .wait(wait)
 
                 .shutdownHook(cmd -> {
-                    getLog().error("Test was aborted - attempting to clean up");
-                    stopNodes(deployServiceName);
-                    removeNodes(deployServiceName);
+
+                    //  If we don't need to wait for the fragment completion, monitoring/stopping/cleaning the
+                    //  node/deployment becomes the caller's responsibility.
+                    //
+                    if (wait) {
+                        getLog().error("Test was aborted - attempting to clean up");
+                        if (!skipStop) {
+                            stopNodes(deployServiceName);
+                            terminateNodes(deployServiceName);
+                        }
+                    }
                 })
 
                 .onError((runner, resultCode) -> {
