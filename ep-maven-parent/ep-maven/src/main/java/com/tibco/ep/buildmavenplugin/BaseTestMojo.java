@@ -272,6 +272,16 @@ abstract class BaseTestMojo extends BaseExecuteMojo {
     @Parameter(property = "skipStop")
     boolean skipStop;
     /**
+     * <p>Set this to 'true' to trigger a snapshot when a node is terminated by a maven shutdown</p>
+     *
+     * <p></p>Such a termination happens when a test timeout is triggered by maven, and this option
+     * allows the user to have additional information on the nodes being terminated.</p>
+     *
+     * @since 2.3.1
+     */
+    @Parameter(property = "snapshotShutdownTerminatedNodes", defaultValue = "false")
+    boolean snapshotShutdownTerminatedNodes;
+    /**
      * The classpath elements of the project being tested.
      *
      * @since 1.0.0
@@ -346,6 +356,17 @@ abstract class BaseTestMojo extends BaseExecuteMojo {
             stopNodes(deployServiceName, ErrorHandling.IGNORE);
         } catch (MojoExecutionException e) {
             getLog().debug("Could not stop nodes", e);
+        }
+    }
+
+    private void snapshotService(String deployServiceName) {
+        try {
+            newCommand(deployServiceName)
+                .commandAndTarget("create", "snapshot")
+                .errorHandling(ErrorHandling.IGNORE)
+                .run();
+        } catch (MojoExecutionException e) {
+            getLog().debug("Could not create snapshot for service: " + deployServiceName, e);
         }
     }
 
@@ -904,8 +925,15 @@ abstract class BaseTestMojo extends BaseExecuteMojo {
                     //  node/deployment becomes the caller's responsibility.
                     //
                     if (wait) {
-                        getLog().error("Test was aborted - attempting to clean up");
+
                         if (!skipStop) {
+
+                            if (snapshotShutdownTerminatedNodes) {
+                                getLog().warn("Test was aborted - attempting to snapshot service: " + deployServiceName);
+                                snapshotService(deployServiceName);
+                            }
+
+                            getLog().error("Test was aborted - attempting to clean up");
                             stopNodes(deployServiceName);
                             terminateNodes(deployServiceName);
                         }
