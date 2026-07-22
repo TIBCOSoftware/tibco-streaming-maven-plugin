@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2018-2024 Cloud Software Group, Inc.
+ * Copyright (C) 2018-2026 Cloud Software Group, Inc.
  * 
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -78,6 +78,16 @@ import org.codehaus.plexus.archiver.zip.ZipUnArchiver;
 @Mojo(name = "install-product", defaultPhase = VALIDATE, threadSafe = true)
 public class InstallProductMojo extends BaseMojo {
 
+    // Product validation files used to detect an external (manual/local) install.
+    // 11.3 and later use a JSON deploy specification; older releases used a .kds
+    // descriptor. When the corresponding parameter is left unset, both names are
+    // accepted so the plugin works against either.
+    //
+    private static final String SB_DEPLOY_SPEC = "distrib/tibco/sb/deploy/SBDeploySpec.json";
+    private static final String SB_KDS = "distrib/tibco/sb/deploy/sb.kds";
+    private static final String DTM_DEPLOY_SPEC = "distrib/tibco/dtm/deploy/DTMDeploySpec.json";
+    private static final String DTM_KDS = "distrib/tibco/dtm/deploy/dtm.kds";
+
     /**
      * <p>Directory to store flag files.</p>
      * 
@@ -94,29 +104,43 @@ public class InstallProductMojo extends BaseMojo {
     /**
      * <p>File to check if DTM product has been installed externally - if this exists,
      * then product installation is not attempted.</p>
-     * 
+     *
+     * <p>When left unset (the default), the plugin looks for either the current
+     * deploy specification ({@code distrib/tibco/dtm/deploy/DTMDeploySpec.json},
+     * used by 11.3 and later) or the legacy descriptor
+     * ({@code distrib/tibco/dtm/deploy/dtm.kds}, used by older releases), so a
+     * manual/local build is detected regardless of product version. Set this
+     * parameter to check a specific file instead.</p>
+     *
      * <p>Relative to productHome.<p>
-     * 
+     *
      * <p>Example use in pom.xml:</p>
      * <img src="uml/installproduct-dtmProductValidationFile.svg" alt="pom">
-     * 
+     *
      * @since 1.0.0
      */
-    @Parameter(defaultValue="distrib/tibco/dtm/deploy/dtm.kds")
+    @Parameter(defaultValue="")
     String dtmProductValidationFile;
 
     /**
      * <p>File to check if SB product has been installed externally - if this exists,
      * then product installation is not attempted.</p>
-     * 
+     *
+     * <p>When left unset (the default), the plugin looks for either the current
+     * deploy specification ({@code distrib/tibco/sb/deploy/SBDeploySpec.json},
+     * used by 11.3 and later) or the legacy descriptor
+     * ({@code distrib/tibco/sb/deploy/sb.kds}, used by older releases), so a
+     * manual/local build is detected regardless of product version. Set this
+     * parameter to check a specific file instead.</p>
+     *
      * <p>Relative to productHome.<p>
      *
      * <p>Example use in pom.xml:</p>
      * <img src="uml/installproduct-sbProductValidationFile.svg" alt="pom">
-     * 
+     *
      * @since 1.0.0
      */
-    @Parameter(defaultValue="distrib/tibco/sb/deploy/sb.kds")
+    @Parameter(defaultValue="")
     String sbProductValidationFile;
 
     /**
@@ -326,11 +350,11 @@ public class InstallProductMojo extends BaseMojo {
             }
         }
 
-        if (!forceReplace && isSBProduct(artifact) && new File(productHome, sbProductValidationFile).exists()) {
+        if (!forceReplace && isSBProduct(artifact) && manualInstallExists(sbProductValidationFile, SB_DEPLOY_SPEC, SB_KDS)) {
             getLog().info(artifact.toString()+" already installed manually to "+productHome);
             return true;
         }
-        if (!forceReplace && isDTMProduct(artifact) && new File(productHome, dtmProductValidationFile).exists()) {
+        if (!forceReplace && isDTMProduct(artifact) && manualInstallExists(dtmProductValidationFile, DTM_DEPLOY_SPEC, DTM_KDS)) {
             getLog().info(artifact.toString()+" already installed manually to "+productHome);
             return true;
         }
@@ -343,11 +367,26 @@ public class InstallProductMojo extends BaseMojo {
             getLog().debug(getArtifactPath(artifact)+" not downloaded yet ... skipping unpack");
             return true;
         }
-        
+
         return false;
     }
-    
-    
+
+    // return true if a product validation file indicating an external (manual)
+    // install exists under productHome.
+    //
+    // If configuredFile is set (non-empty), only that file is checked. Otherwise
+    // both the current deploy specification and the legacy .kds descriptor are
+    // accepted, so the plugin works against 11.3+ and older distributions.
+    //
+    private boolean manualInstallExists(String configuredFile, String deploySpecFile, String legacyKdsFile) {
+        if (configuredFile != null && !configuredFile.isEmpty()) {
+            return new File(productHome, configuredFile).exists();
+        }
+        return new File(productHome, deploySpecFile).exists()
+            || new File(productHome, legacyKdsFile).exists();
+    }
+
+
     private String md5(final File sourceFile) {
         
         String md5 = "";

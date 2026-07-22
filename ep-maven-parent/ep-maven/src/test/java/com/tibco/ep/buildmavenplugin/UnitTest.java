@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2018-2025. Cloud Software Group, Inc.
+ * Copyright (C) 2018-2026. Cloud Software Group, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -253,6 +253,91 @@ public class UnitTest extends BetterAbstractMojoTestCase {
         Assert.assertTrue(testPom.exists());
 
         runApplicationTest(simulatedLog, testPom, deployPom);
+    }
+
+    /**
+     * Install product - manual (external) install detection.
+     *
+     * <p>When a product validation file is already present under productHome,
+     * install-product must detect the manual/local install and leave it alone -
+     * neither overwriting it nor writing an install marker. Verified for both the
+     * current JSON deploy specification (11.3 and later) and the legacy .kds
+     * descriptor (older releases).</p>
+     *
+     * @throws Exception on error
+     */
+    @Test
+    public void testManualInstallDetection() throws Exception {
+        LOGGER.info("Manual install detection");
+
+        // current (11.3+) deploy specification
+        assertManualInstallDetected("distrib/tibco/dtm/deploy/DTMDeploySpec.json");
+
+        // legacy (pre-11.3) descriptor
+        assertManualInstallDetected("distrib/tibco/dtm/deploy/dtm.kds");
+    }
+
+    private void assertManualInstallDetected(String validationFile) throws Exception {
+        final SimulatedLog simulatedLog = new SimulatedLog(false);
+
+        final File pom = new File("target/projects", "pom.xml");
+        Assert.assertTrue(pom.exists());
+
+        final String dependencyVersionUnderTest = System.getProperty("CURRENT_PROJECT_VERSION");
+        assertTrue("Bad CURRENT_PROJECT_VERSION=" + dependencyVersionUnderTest,
+            dependencyVersionUnderTest != null && !dependencyVersionUnderTest.isEmpty());
+
+        // A productHome that already contains only the validation file - no marker.
+        //
+        final File productHome = new File(
+                Paths.get(System.getProperty("WORK_DIRECTORY", "")).toAbsolutePath().toFile(),
+                "manualproducthome");
+        deleteRecursively(productHome);
+
+        final File deploySpec = new File(productHome, validationFile);
+        Assert.assertTrue(deploySpec.getParentFile().mkdirs());
+        Assert.assertTrue(deploySpec.createNewFile());
+
+        final File markerFile =
+            new File(new File(productHome, "dependency-maven-plugin-markers"),
+                     "com.tibco.ep.dtm-platform_" + getPlatformOSArchPart()
+                     + "-zip-" + dependencyVersionUnderTest + ".marker");
+
+        final InstallProductMojo installProduct =
+            (InstallProductMojo) lookupConfiguredMojo(pom, "install-product");
+        Assert.assertNotNull(installProduct);
+        installProduct.productHome = productHome;
+        installProduct.setLog(simulatedLog);
+        installProduct.execute();
+
+        assertEquals(simulatedLog.getErrorLog(), 0, simulatedLog.getErrorLog().length());
+        assertTrue("expected manual install to be detected for " + validationFile
+                + ", info log was: " + simulatedLog.getInfoLog(),
+            simulatedLog.getInfoLog().contains("already installed manually"));
+        assertFalse("product should not have been installed over a manual install: "
+                + simulatedLog.getInfoLog(),
+            simulatedLog.getInfoLog().contains("Installing "));
+        assertFalse("install marker should not be written for a manual install: " + markerFile,
+            markerFile.exists());
+    }
+
+    private void deleteRecursively(File root) throws IOException {
+        if (!root.exists()) {
+            return;
+        }
+        Files.walkFileTree(root.toPath(), new SimpleFileVisitor<Path>() {
+            @Override
+            public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                Files.delete(file);
+                return FileVisitResult.CONTINUE;
+            }
+
+            @Override
+            public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
+                Files.delete(dir);
+                return FileVisitResult.CONTINUE;
+            }
+        });
     }
 
     private void runApplicationTest(SimulatedLog simulatedLog, File testPom, File deployPom) throws Exception {
