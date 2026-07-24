@@ -100,6 +100,7 @@ abstract class BaseMojo extends AbstractMojo {
     private static final String DTM_GROUP_IDENTIFIER = "com.tibco.ep.dtm";
     private static final String DTM_MANAGEMENT_ARTIFACT_IDENTIFIER = "management";
     private static final String DTM_SDK_ARTIFACT_IDENTIFIER = "sdk";
+    private static final String DTM_NATIVE_API_BINDINGS_ARTIFACT_IDENTIFIER = "native-api-bindings";
     private static final String SB_GROUP_IDENTIFIER = "com.tibco.ep.sb";
     private static final String SB_RT_GROUP_IDENTIFIER = "com.tibco.ep.sb.rt";
     private static final String SB_CONTAINER_IDENTIFIER = "container";
@@ -378,7 +379,7 @@ abstract class BaseMojo extends AbstractMojo {
         String productVersion = getProductVersion();
 
         if (productVersion.isEmpty()) {
-            throw new MojoExecutionException("Unable to determine the product version - ensure that either the management or sdk jar is set as a dependency in your pom");
+            throw new MojoExecutionException("Unable to determine the product version - ensure that the management, sdk (pre Streaming 11.3.0), or native-api-bindings (11.3.0+) jar is a direct or transitive dependency of your project");
         }
 
         if (service == PlatformService.ADMINISTRATION) {
@@ -775,6 +776,15 @@ abstract class BaseMojo extends AbstractMojo {
 
         // FIX THIS - DJS: We should use transitive dependencies for the SDK artifact
         for (Artifact artifact : getProjectDependencies(DTM_GROUP_IDENTIFIER, DTM_SDK_ARTIFACT_IDENTIFIER)) {
+            getLog().debug("Found product version " + artifact.getBaseVersion()
+                + " from " + artifact);
+            return artifact.getBaseVersion();
+        }
+
+        // The sdk artifact was removed when the native API moved to jextract
+        // bindings; native-api-bindings now occupies the same place on the
+        // dependency path, so use it as an equivalent product version source.
+        for (Artifact artifact : getProjectDependencies(DTM_GROUP_IDENTIFIER, DTM_NATIVE_API_BINDINGS_ARTIFACT_IDENTIFIER)) {
             getLog().debug("Found product version " + artifact.getBaseVersion()
                 + " from " + artifact);
             return artifact.getBaseVersion();
