@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2.3.1
+
+### Added
+
+- `discoveryPortRangeMin` and `discoveryPortRangeMax` to control the range automatic discovery port selection draws from. The default range is unchanged.
+
 ## 2.3.0
 
 ### Added

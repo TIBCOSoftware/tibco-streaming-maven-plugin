@@ -76,6 +76,25 @@ abstract class BaseExecuteMojo extends BaseMojo {
     private static final Random RANDOM = new Random();
 
     /**
+     * Lowest port considered by automatic discovery port selection when
+     * {@link #discoveryPortRangeMin} is not set.  Must match the parameter's
+     * declared default value.
+     */
+    static final int DEFAULT_DISCOVERY_PORT_RANGE_MIN = 49152;
+
+    /**
+     * Highest port considered by automatic discovery port selection when
+     * {@link #discoveryPortRangeMax} is not set.  Must match the parameter's
+     * declared default value.
+     */
+    static final int DEFAULT_DISCOVERY_PORT_RANGE_MAX = 65535;
+
+    /**
+     * Highest valid port number
+     */
+    private static final int MAX_PORT = 65535;
+
+    /**
      * <p>List of host names for the client discovery.</p>
      *
      * <p>This is used on each administration client invocation.</p>
@@ -131,6 +150,39 @@ abstract class BaseExecuteMojo extends BaseMojo {
      */
     @Parameter(defaultValue = "${project.build.directory}/discovery.port")
     File discoveryPortFile;
+    /**
+     * <p>Lowest port number considered when a discovery port is selected automatically.</p>
+     *
+     * <p>Selection defaults to the IANA dynamic port range, 49152 to 65535.  On most
+     * platforms that is also the range the operating system draws from when it assigns
+     * a port automatically, so a selected port can be taken by an unrelated socket
+     * between the time it is selected and the time the node binds it.  Set this and
+     * {@link #discoveryPortRangeMax} to select from a range the operating system does
+     * not assign automatically.</p>
+     *
+     * <p>Ignored when {@link #discoveryPort} is set.</p>
+     *
+     * <p>Example use in pom.xml:</p>
+     * <img src="uml/discoveryPortRangeMin.svg" alt="pom">
+     *
+     * @since 2.3.1
+     */
+    @Parameter(property = "discoveryPortRangeMin", defaultValue = "49152")
+    Integer discoveryPortRangeMin;
+    /**
+     * <p>Highest port number considered when a discovery port is selected automatically.</p>
+     *
+     * <p>See {@link #discoveryPortRangeMin}.</p>
+     *
+     * <p>Ignored when {@link #discoveryPort} is set.</p>
+     *
+     * <p>Example use in pom.xml:</p>
+     * <img src="uml/discoveryPortRangeMax.svg" alt="pom">
+     *
+     * @since 2.3.1
+     */
+    @Parameter(property = "discoveryPortRangeMax", defaultValue = "65535")
+    Integer discoveryPortRangeMax;
     /**
      * <p>cluster name to append to the node names.</p>
      *
@@ -229,9 +281,24 @@ abstract class BaseExecuteMojo extends BaseMojo {
             return 0;
         }
 
+        int rangeMin = discoveryPortRangeMin != null
+            ? discoveryPortRangeMin : DEFAULT_DISCOVERY_PORT_RANGE_MIN;
+        int rangeMax = discoveryPortRangeMax != null
+            ? discoveryPortRangeMax : DEFAULT_DISCOVERY_PORT_RANGE_MAX;
+
+        if (rangeMin < 1 || rangeMax > MAX_PORT || rangeMin > rangeMax) {
+
+            getLog().warn("Discovery port range " + rangeMin + " to " + rangeMax
+                + " is not valid, using " + DEFAULT_DISCOVERY_PORT_RANGE_MIN
+                + " to " + DEFAULT_DISCOVERY_PORT_RANGE_MAX);
+
+            rangeMin = DEFAULT_DISCOVERY_PORT_RANGE_MIN;
+            rangeMax = DEFAULT_DISCOVERY_PORT_RANGE_MAX;
+        }
+
         for (int count = 0; count < 10000; count++) {
 
-            int port = RANDOM.nextInt(65536 - 49152) + 49152;
+            int port = RANDOM.nextInt(rangeMax - rangeMin + 1) + rangeMin;
             try (DatagramSocket socket = new DatagramSocket(port)) {
 
                 // save it to a file if possible
