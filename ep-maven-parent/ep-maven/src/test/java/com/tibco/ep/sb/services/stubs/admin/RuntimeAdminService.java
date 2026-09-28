@@ -48,6 +48,18 @@ import java.nio.file.Path;
  * The admin service stub implementation
  */
 public class RuntimeAdminService implements IRuntimeAdminService {
+
+    private static volatile boolean tlsCredentialsSupported = true;
+
+    /**
+     * Simulate a runtime that predates TLS credential support.
+     *
+     * @param supported The value {@link #isTLSCredentialsSupported()} returns
+     */
+    public static void setTLSCredentialsSupported(final boolean supported) {
+        RuntimeAdminService.tlsCredentialsSupported = supported;
+    }
+
     @Override
     public Context newContext(Path installation) {
         return new Context(this, installation);
@@ -81,5 +93,10 @@ public class RuntimeAdminService implements IRuntimeAdminService {
     @Override
     public AbstractDeployFragmentCommandBuilder newDeployCommandBuilder(IDestination destination, FragmentType fragmentType, String target) {
         return new DeployFragmentCommand.Builder(destination, fragmentType, target);
+    }
+
+    @Override
+    public boolean isTLSCredentialsSupported() {
+        return RuntimeAdminService.tlsCredentialsSupported;
     }
 }

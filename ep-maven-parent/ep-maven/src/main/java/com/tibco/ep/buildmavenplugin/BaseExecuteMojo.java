@@ -141,6 +141,57 @@ abstract class BaseExecuteMojo extends BaseMojo {
     @Parameter
     String password;
     /**
+     * <p>Trust store used to verify the certificate of nodes whose administration listener
+     * uses a secure communication profile.  Required to administer such nodes; not needed
+     * for nodes using the default node certificate.</p>
+     *
+     * <p>Applied to every administration command except node installation.  Installing a
+     * node from an application archive whose node deploy configuration names a secure
+     * communication profile switches the node to that profile as the last step of the
+     * install, so the install itself always uses the default certificate while the
+     * commands that follow it require this trust store.</p>
+     *
+     * <p>Example use in pom.xml:</p>
+     * <img src="uml/truststore.svg" alt="pom">
+     *
+     * @since 2.3.1
+     */
+    @Parameter
+    File truststore;
+    /**
+     * <p>Trust store password</p>
+     *
+     * <p>Example use in pom.xml:</p>
+     * <img src="uml/truststorePassword.svg" alt="pom">
+     *
+     * @since 2.3.1
+     */
+    @Parameter
+    String truststorePassword;
+    /**
+     * <p>Key store holding the client certificate presented to nodes whose secure
+     * communication profile requires client authentication.</p>
+     *
+     * <p>Applied to the same commands as {@link #truststore}.</p>
+     *
+     * <p>Example use in pom.xml:</p>
+     * <img src="uml/keystore.svg" alt="pom">
+     *
+     * @since 2.3.1
+     */
+    @Parameter
+    File keystore;
+    /**
+     * <p>Key store password</p>
+     *
+     * <p>Example use in pom.xml:</p>
+     * <img src="uml/keystorePassword.svg" alt="pom">
+     *
+     * @since 2.3.1
+     */
+    @Parameter
+    String keystorePassword;
+    /**
      * <p>Filename to be used to store generated discovery port</p>
      *
      * <p>Example use in pom.xml:</p>
@@ -367,6 +418,8 @@ abstract class BaseExecuteMojo extends BaseMojo {
         AbstractNodeBuilder nodeBuilder = getContext().newNode(nodeName);
         updateUserNameAndPassword(nodeBuilder);
 
+        // No TLS credentials: the node uses the default certificate for the whole install, and a trust store would
+        // replace the anchor that verifies it. See truststore.
         INode node = nodeBuilder.build();
 
         AbstractInstallNodeCommandBuilder installNodeCommandBuilder = node
@@ -489,6 +542,32 @@ abstract class BaseExecuteMojo extends BaseMojo {
     }
 
     /**
+     * {@inheritDoc}
+     * <p>
+     * Also fails if a key store or trust store is configured but the runtime predates support for them, rather
+     * than connecting without them.
+     */
+    @Override
+    boolean initializeService(PlatformService service, ErrorHandling errorHandling) throws MojoExecutionException {
+        if (!super.initializeService(service, errorHandling)) {
+            return false;
+        }
+
+        if (service == PlatformService.ADMINISTRATION && getAdminService() != null
+            && (keystore != null || truststore != null) && !getAdminService().isTLSCredentialsSupported()) {
+
+            String message = "keystore and truststore are not supported by the Streaming runtime in " + productHome;
+            if (errorHandling == ErrorHandling.IGNORE) {
+                getLog().warn(message);
+                return false;
+            }
+            throw new MojoExecutionException(message);
+        }
+
+        return true;
+    }
+
+    /**
      * Reset the environment for this context
      */
     void doSetEnvironment() {
@@ -527,6 +606,28 @@ abstract class BaseExecuteMojo extends BaseMojo {
     }
 
     /**
+     * Apply the configured key store and trust store.
+     * <p>
+     * Never used for node installation - see {@link #truststore}.
+     *
+     * @param builder The builder
+     */
+    private void updateTLSCredentials(AbstractDestinationBuilder builder) {
+        if (keystore != null) {
+            builder.withKeystore(keystore.toPath());
+            if (keystorePassword != null) {
+                builder.withKeystorePassword(keystorePassword);
+            }
+        }
+        if (truststore != null) {
+            builder.withTruststore(truststore.toPath());
+            if (truststorePassword != null) {
+                builder.withTruststorePassword(truststorePassword);
+            }
+        }
+    }
+
+    /**
      * Create a new destination
      * @param serviceName service name
      * @return destination
@@ -535,6 +636,7 @@ abstract class BaseExecuteMojo extends BaseMojo {
 
         AbstractDestinationBuilder builder = getContext().newDestination().withName(serviceName);
         updateUserNameAndPassword(builder);
+        updateTLSCredentials(builder);
 
         if (discoveryHosts != null && discoveryHosts.length > 0) {
             for (String discoveryHost : discoveryHosts) {
@@ -552,6 +654,7 @@ abstract class BaseExecuteMojo extends BaseMojo {
             .withAdministrationPort(adminPort);
 
         updateUserNameAndPassword(builder);
+        updateTLSCredentials(builder);
         return builder.build();
     }
 

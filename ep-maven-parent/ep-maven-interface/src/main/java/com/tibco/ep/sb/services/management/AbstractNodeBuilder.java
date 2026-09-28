@@ -30,6 +30,8 @@
 
 package com.tibco.ep.sb.services.management;
 
+import java.nio.file.Path;
+
 /**
  * Base class for node builder
  */
@@ -93,6 +95,26 @@ public abstract class AbstractNodeBuilder extends AbstractDestinationBuilder  {
     @Override
     public AbstractNodeBuilder withPassword(String password) {
         return (AbstractNodeBuilder) super.withPassword(password);
+    }
+
+    @Override
+    public AbstractNodeBuilder withKeystore(Path keystore) {
+        return (AbstractNodeBuilder) super.withKeystore(keystore);
+    }
+
+    @Override
+    public AbstractNodeBuilder withKeystorePassword(String keystorePassword) {
+        return (AbstractNodeBuilder) super.withKeystorePassword(keystorePassword);
+    }
+
+    @Override
+    public AbstractNodeBuilder withTruststore(Path truststore) {
+        return (AbstractNodeBuilder) super.withTruststore(truststore);
+    }
+
+    @Override
+    public AbstractNodeBuilder withTruststorePassword(String truststorePassword) {
+        return (AbstractNodeBuilder) super.withTruststorePassword(truststorePassword);
     }
 
     @Override

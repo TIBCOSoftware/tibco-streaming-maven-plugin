@@ -31,13 +31,17 @@
 package com.tibco.ep.sb.services.stubs.admin;
 
 import com.tibco.ep.sb.services.management.AbstractCommandBuilder;
+import com.tibco.ep.sb.services.management.AbstractDestinationBuilder;
 import com.tibco.ep.sb.services.management.ICommand;
 import com.tibco.ep.sb.services.management.IDestination;
 import com.tibco.ep.sb.services.management.INotifier;
 
+import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.BiConsumer;
 
 /**
@@ -45,9 +49,27 @@ import java.util.function.BiConsumer;
  */
 public class Command extends Stub implements ICommand {
 
+    private static final List<Execution> EXECUTIONS = Collections.synchronizedList(new ArrayList<>());
+
     private final IDestination destination;
     private final AbstractCommandBuilder builder;
     private final List<Trigger> triggers = new ArrayList<>();
+
+    /**
+     * @return The commands executed since the last {@link #clearExecutions()}, in execution order
+     */
+    public static List<Execution> getExecutions() {
+        synchronized (Command.EXECUTIONS) {
+            return new ArrayList<>(Command.EXECUTIONS);
+        }
+    }
+
+    /**
+     * Forget all recorded executions
+     */
+    public static void clearExecutions() {
+        Command.EXECUTIONS.clear();
+    }
 
     /**
      * @param builder The builder
@@ -93,6 +115,13 @@ public class Command extends Stub implements ICommand {
 
         logMethod("executeAndWaitForCompletion", builder, parameters);
 
+        AbstractDestinationBuilder destinationBuilder = destination instanceof Destination
+            ? ((Destination) destination).getBuilder()
+            : null;
+        Command.EXECUTIONS.add(new Execution(builder.getCommand(), builder.getTarget(),
+            destinationBuilder != null ? destinationBuilder.getTruststore() : Optional.empty(),
+            destinationBuilder != null ? destinationBuilder.getKeystore() : Optional.empty()));
+
         notifier.start();
         notifier.info("command",
             "Processing command '" + builder.getCommand() + " " + builder.getTarget() + "'");
@@ -124,6 +153,17 @@ public class Command extends Stub implements ICommand {
         public ICommand build() {
             return new Command(this);
         }
+    }
+
+    /**
+     * An executed command and the TLS credentials of its destination
+     *
+     * @param command    The command
+     * @param target     The target
+     * @param truststore The destination trust store
+     * @param keystore   The destination key store
+     */
+    public record Execution(String command, String target, Optional<Path> truststore, Optional<Path> keystore) {
     }
 
     private static class Trigger {

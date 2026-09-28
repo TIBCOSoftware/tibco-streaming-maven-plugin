@@ -73,6 +73,13 @@ public class Destination extends ServiceAwareStub implements IDestination {
         return builder.getName();
     }
 
+    /**
+     * @return The builder this destination was built from, or null for a no-op destination
+     */
+    AbstractDestinationBuilder getBuilder() {
+        return builder;
+    }
+
     @Override
     public String toString() {
         return getClass().getSimpleName() + (builder != null ? builder.toString() : "");

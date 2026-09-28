@@ -97,4 +97,16 @@ public interface IRuntimeAdminService {
      * @return A new deploy command builder
      */
     AbstractDeployFragmentCommandBuilder newDeployCommandBuilder(IDestination destination, FragmentType fragmentType, String target);
+
+    /**
+     * Whether this service applies the key store and trust store settings of a destination
+     * builder (see {@link AbstractDestinationBuilder#withTruststore(Path)}).
+     * An implementation that predates those settings ignores them, so callers must check
+     * this before relying on them.
+     *
+     * @return true if TLS credentials are applied, false otherwise
+     */
+    default boolean isTLSCredentialsSupported() {
+        return false;
+    }
 }

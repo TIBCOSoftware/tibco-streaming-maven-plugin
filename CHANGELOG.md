@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 ### Added
 
 - `discoveryPortRangeMin` and `discoveryPortRangeMax` to control the range automatic discovery port selection draws from. The default range is unchanged.
+- `truststore`, `truststorePassword`, `keystore` and `keystorePassword` to administer nodes whose administration listener uses a secure communication profile. They apply to every administration command except node installation, which always uses the default node certificate. Requires a Streaming runtime that supports them; the build fails if they are set against one that does not.
 
 ## 2.3.0
 
