@@ -75,10 +75,11 @@
 
         <!--
             The unit test version for SB/DTM is the version of this project (using stubs).
-            The integration test version is a real version.
+            The integration test version is a real version, which must be in the local repository;
+            override with -Dintegration.test.sb.version to test against another.
          -->
         <unit.test.sb.version>${project.version}</unit.test.sb.version>
-        <integration.test.sb.version>11.2.0-SNAPSHOT</integration.test.sb.version>
+        <integration.test.sb.version>11.3.0-SNAPSHOT</integration.test.sb.version>
         <slf4j.version>1.7.26</slf4j.version>
 
         <!-- Properties owned by other plugins. -->
@@ -828,7 +829,8 @@
 
                 <plugin>
                     <artifactId>maven-invoker-plugin</artifactId>
-                    <version>3.9.0</version>
+                    <!-- 3.10 or later: earlier releases bundle a Groovy that cannot run hook scripts on Java 25 -->
+                    <version>3.10.1</version>
                 </plugin>
 
                 <plugin>
@@ -918,7 +920,7 @@
                                     <version>[3.9,4.0)</version>
                                 </requireMavenVersion>
                                 <requireJavaVersion>
-                                    <version>[21,25)</version>
+                                    <version>[21,26)</version>
                                 </requireJavaVersion>
                             </rules>
                         </configuration>

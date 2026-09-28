@@ -262,9 +262,14 @@
                         <pomInclude>*/pom.xml</pomInclude>
                     </pomIncludes>
                     <postBuildHookScript>verify</postBuildHookScript>
+                    <!-- Invoker filters @...@ from declared properties only; this lets -D select the runtime. -->
+                    <filterProperties>
+                        <integration.test.sb.version>${integration.test.sb.version}</integration.test.sb.version>
+                    </filterProperties>
+                    <!-- Passed to every invoked build as user properties, which override the same property in
+                         every dependency POM - keep this list to what the integration tests actually use. -->
                     <properties>
                         <ep-maven.version>${ep-maven.version}</ep-maven.version>
-                        <junit.version>${junit.version}</junit.version>
                     </properties>
                     <scriptVariables>
                         <CURRENT_PROJECT_VERSION>${project.version}</CURRENT_PROJECT_VERSION>
