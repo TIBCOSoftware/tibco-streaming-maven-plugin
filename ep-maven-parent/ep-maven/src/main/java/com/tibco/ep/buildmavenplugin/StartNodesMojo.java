@@ -218,7 +218,7 @@ public class StartNodesMojo extends BaseExecuteMojo {
             if (nodeParameters != null) {
                 for(String argument : nodeParameters) {
                     if (argument.contains("=")) {
-                        String[] args = argument.split("=");
+                        String[] args = argument.split("=", 2);
                         if (args.length == 2) {
                             defaultArguments.put(args[0], args[1]);
                         } else {

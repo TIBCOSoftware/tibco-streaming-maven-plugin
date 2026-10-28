@@ -274,13 +274,24 @@ abstract class BaseTestMojo extends BaseExecuteMojo {
     /**
      * <p>Set this to 'true' to trigger a snapshot when a node is terminated by a maven shutdown</p>
      *
-     * <p></p>Such a termination happens when a test timeout is triggered by maven, and this option
+     * <p>Such a termination happens when a test timeout is triggered by maven, and this option
      * allows the user to have additional information on the nodes being terminated.</p>
      *
      * @since 2.3.1
      */
     @Parameter(property = "snapshotShutdownTerminatedNodes", defaultValue = "false")
     boolean snapshotShutdownTerminatedNodes;
+
+    /**
+     * <p>Set this to the destination where the snapshot of terminated nodes will be stored</p>
+     *
+     * <p>Only effective when snapshotShutdownTerminateNodes is true</p>
+     *
+     * @since 2.3.1
+     */
+    @Parameter(property = "snapshotShutdownTerminatedNodesDestination", defaultValue = "${project.build.directory}/test-nodes")
+    File snapshotShutdownTerminatedNodesDestination;
+
     /**
      * The classpath elements of the project being tested.
      *
@@ -359,10 +370,13 @@ abstract class BaseTestMojo extends BaseExecuteMojo {
         }
     }
 
-    private void snapshotService(String deployServiceName) {
+    private void snapshotService(String deployServiceName, String destination) {
         try {
+            Map<String, String> parameters = new HashMap<>();
+            parameters.put("destination", destination);
             newCommand(deployServiceName)
                 .commandAndTarget("create", "snapshot")
+                .parameters(parameters)
                 .errorHandling(ErrorHandling.IGNORE)
                 .run();
         } catch (MojoExecutionException e) {
@@ -930,7 +944,7 @@ abstract class BaseTestMojo extends BaseExecuteMojo {
 
                             if (snapshotShutdownTerminatedNodes) {
                                 getLog().warn("Test was aborted - attempting to snapshot service: " + deployServiceName);
-                                snapshotService(deployServiceName);
+                                snapshotService(deployServiceName, snapshotShutdownTerminatedNodesDestination.getAbsolutePath());
                             }
 
                             getLog().error("Test was aborted - attempting to clean up");
