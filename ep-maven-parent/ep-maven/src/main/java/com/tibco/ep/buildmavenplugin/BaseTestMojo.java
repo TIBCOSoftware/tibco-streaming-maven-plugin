@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2018-2025. Cloud Software Group, Inc.
+ * Copyright © 2018-2026. Cloud Software Group, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -830,8 +830,14 @@ abstract class BaseTestMojo extends BaseExecuteMojo {
 
             //  Set deploy options.
             //
-            List<String> exeParams = new ArrayList<>(javaOptions);
+            List<String> exeParams = new ArrayList<>();
 
+            // enable assertions - this must precede the user's java options so that
+            // an explicit -disableassertions (or -da) takes precedence
+            //
+            exeParams.add("-enableassertions");
+
+            exeParams.addAll(javaOptions);
 
             //  Copy node options so we can create unique values
             //
@@ -868,10 +874,6 @@ abstract class BaseTestMojo extends BaseExecuteMojo {
             if (nodeOptionsProperty != null) {
                 exeParams.addAll(Arrays.asList(nodeOptionsProperty));
             }
-
-            // enable assertions
-            //
-            exeParams.add("-enableassertions");
 
             // java classpath
             //

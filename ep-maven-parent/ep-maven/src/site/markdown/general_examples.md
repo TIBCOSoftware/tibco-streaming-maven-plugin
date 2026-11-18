@@ -639,6 +639,15 @@ Node deployment supports both java options and node options.
     Node options may also be set on the maven command line using
     **-DnodeOptions**.
 
+Assertions are enabled by default in the deployed JVM.  The default is applied before **javaOptions**, so
+they may be disabled — for example for performance testing — with :
+``` xml
+                <configuration>
+                    <javaOptions>
+                        <javaOption>-disableassertions</javaOption>
+                    </javaOptions>
+                </configuration>
+```
 Note that reading the client configuration file is disabled by default (i.e., ignoreoptionsfile is set to true) —
 this is to give stability to test runs.  However, the **nodeOptions** may be used to override this default :
 

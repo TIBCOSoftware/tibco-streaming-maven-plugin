@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020-2024 Cloud Software Group, Inc.
+ * Copyright (C) 2020-2026 Cloud Software Group, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -31,6 +31,7 @@
 package com.tibco.ep.sb.services.stubs.admin;
 
 import com.tibco.ep.sb.services.management.AbstractCommandBuilder;
+import com.tibco.ep.sb.services.management.AbstractDeployFragmentCommandBuilder;
 import com.tibco.ep.sb.services.management.AbstractDestinationBuilder;
 import com.tibco.ep.sb.services.management.ICommand;
 import com.tibco.ep.sb.services.management.IDestination;
@@ -120,7 +121,10 @@ public class Command extends Stub implements ICommand {
             : null;
         Command.EXECUTIONS.add(new Execution(builder.getCommand(), builder.getTarget(),
             destinationBuilder != null ? destinationBuilder.getTruststore() : Optional.empty(),
-            destinationBuilder != null ? destinationBuilder.getKeystore() : Optional.empty()));
+            destinationBuilder != null ? destinationBuilder.getKeystore() : Optional.empty(),
+            builder instanceof AbstractDeployFragmentCommandBuilder
+                ? ((AbstractDeployFragmentCommandBuilder) builder).getExecutionOptions()
+                : List.of()));
 
         notifier.start();
         notifier.info("command",
@@ -156,14 +160,16 @@ public class Command extends Stub implements ICommand {
     }
 
     /**
-     * An executed command and the TLS credentials of its destination
+     * An executed command, the TLS credentials of its destination and, for a deploy, its execution options
      *
-     * @param command    The command
-     * @param target     The target
-     * @param truststore The destination trust store
-     * @param keystore   The destination key store
+     * @param command          The command
+     * @param target           The target
+     * @param truststore       The destination trust store
+     * @param keystore         The destination key store
+     * @param executionOptions The deploy execution options, in order - empty for any other command
      */
-    public record Execution(String command, String target, Optional<Path> truststore, Optional<Path> keystore) {
+    public record Execution(String command, String target, Optional<Path> truststore, Optional<Path> keystore,
+        List<String> executionOptions) {
     }
 
     private static class Trigger {

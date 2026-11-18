@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## 2.3.1
 
+### Changed
+
+- Assertions are still enabled by default in deployed test nodes, but the default is now applied before `javaOptions` and the test runner no longer forces them on, so `<javaOption>-disableassertions</javaOption>` (or `-da`) turns them off.
+
 ### Added
 
 - `discoveryPortRangeMin` and `discoveryPortRangeMax` to control the range automatic discovery port selection draws from. The default range is unchanged.

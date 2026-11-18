@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2018-2024. Cloud Software Group, Inc.
+ * Copyright (C) 2018-2026. Cloud Software Group, Inc.
  * 
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -130,9 +130,7 @@ public class Runner
         }
 
         // FIX THIS: does not respect "failIfNoTests" parameter
-
-        ClassLoader.getSystemClassLoader().setDefaultAssertionStatus(true);
-
+        //
         // Surefire....sigh. The run() method is not documented, but zero
         // indicates SUCCESS. (The const is private so you'll have to trust me)
         int retval = surefire.run(reportDefinition, testSuites, ClassLoader.getSystemClassLoader(),
